@@ -13,6 +13,7 @@ use crate::SlideApp;
 use crate::theme;
 
 mod keys;
+pub(crate) mod keep_awake;
 mod media;
 mod presenter;
 mod render;
@@ -92,6 +93,10 @@ pub struct Show {
     goto: String,
     goto_at: f64,
     started: bool,
+    /// Keeps the display awake from the moment the show starts (`start_show`) until it ends;
+    /// dropping the show releases it, on every exit path. Held even while the show's window is
+    /// hidden or minimised, so the screen saver cannot start mid-presentation.
+    pub(crate) keep_awake: Option<keep_awake::Guard>,
     show_start: f64,
     /// Elapsed time in presenter view. Pausing it does not pause the show.
     timer: PresenterTimer,
@@ -257,6 +262,7 @@ impl Show {
             goto: String::new(),
             goto_at: 0.0,
             started: false,
+            keep_awake: None,
             show_start: 0.0,
             timer: PresenterTimer::start(0.0),
             notes_px: NOTES_DEFAULT,

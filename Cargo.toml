@@ -76,6 +76,8 @@ egui_kittest = "0.37"
 web-time = "1.1"
 rfd = "0.17"
 arboard = { version = "3.6", default-features = false }
+# Display keep-awake for the slide show (`show/keep_awake.rs`).
+keepawake = "0.6"
 
 [workspace.lints.rust]
 unsafe_code = "forbid"

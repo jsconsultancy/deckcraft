@@ -38,6 +38,10 @@ impl SlideApp {
             let mut show = show::Show::new(&d.doc, from, reading, presenter);
             show.instance = self.show_instance;
             show.keep_cursor = self.ui.show_keep_cursor;
+            // The show holds the display from this moment, not from the first painted frame: a
+            // window that starts minimised or hidden must keep the screen saver away too.
+            // Dropping the show (any exit path) releases it.
+            show.keep_awake = show::keep_awake::acquire();
             self.show = Some(show);
         }
     }
